@@ -20,131 +20,38 @@
             }
 
             function makeBases(th, purpose) {
-                var thStr = String(th),
-                    thWiki = 'th_' + th;
+                var thStr = String(th);
                 var ccFarm = CC_BASE + '/bases/th' + thStr + '-farming';
                 var ccWar = CC_BASE + '/bases/th' + thStr + '-war';
-                var ccBase = CC_BASE + '/bases/th' + thStr;
-                var wikiBase = WIKI_BASE + '/plans/' + thWiki + '/';
-                var wikiFarm = wikiBase + 'farm/';
-                var wikiWar = wikiBase + 'war/';
+                var ccLegend = CC_BASE + '/bases/legend';
                 if (purpose === 'farming') {
-                    return [{
-                            type: 'TH' + th + ' Фарм',
-                            description: 'Защита ресурсов, компактный центр. Хорошо против масс гоблинов и банши.',
-                            link: ccFarm,
-                            rating: 9
-                        },
-                        {
-                            type: 'TH' + th + ' Фарм',
-                            description: 'Разнесённые хранилища, ловушки у складов. Меньше потерь при фарме.',
-                            link: wikiFarm,
-                            rating: 8
-                        },
-                        {
-                            type: 'TH' + th + ' Фарм',
-                            description: 'Анти-2 звезды, защита тёмного эликсира в ядре. Проверенный фарм-лейаут.',
-                            link: ccBase,
-                            rating: 9
-                        },
-                        {
-                            type: 'TH' + th + ' Фарм',
-                            description: 'Компактный центр, хранилища по кольцу. Удобно для фарма лиг.',
-                            link: ccFarm,
-                            rating: 7
-                        },
-                        {
-                            type: 'TH' + th + ' Фарм',
-                            description: 'Защита DE в ядре, ловушки на подходах. Меньше потерь от рейдов.',
-                            link: wikiFarm,
-                            rating: 8
-                        },
-                        {
-                            type: 'TH' + th + ' Фарм',
-                            description: 'Сбалансированный фарм: ресурсы и ратуша. Универсальный лейаут.',
-                            link: ccBase,
-                            rating: 8
-                        }
+                    return [
+                        { type: 'TH' + th + ' Фарм', description: 'Фарм-базы на ClashCodes. Защита ресурсов, компактный центр.', link: ccFarm, rating: 9 },
+                        { type: 'TH' + th + ' Фарм', description: 'Разнесённые хранилища, ловушки у складов. Меньше потерь при фарме.', link: ccFarm, rating: 8 },
+                        { type: 'TH' + th + ' Фарм', description: 'Анти-2 звезды, защита тёмного эликсира в ядре.', link: ccFarm, rating: 9 },
+                        { type: 'TH' + th + ' Фарм', description: 'Компактный центр, хранилища по кольцу. Удобно для фарма лиг.', link: ccFarm, rating: 7 },
+                        { type: 'TH' + th + ' Фарм', description: 'Защита DE в ядре, ловушки на подходах.', link: ccFarm, rating: 8 },
+                        { type: 'TH' + th + ' Фарм', description: 'Сбалансированный фарм. Все базы — с ClashCodes.', link: ccFarm, rating: 8 }
                     ];
                 }
                 if (purpose === 'push') {
-                    return [{
-                            type: 'TH' + th + ' Пуш',
-                            description: 'Защита ратуши в центре, сильные точки по периметру. Для пуша кубков.',
-                            link: ccBase,
-                            rating: 9
-                        },
-                        {
-                            type: 'TH' + th + ' Пуш',
-                            description: 'Анти-воздух и анти-земля. Сложно взять 3 звезды на высоких лигах.',
-                            link: wikiBase,
-                            rating: 8
-                        },
-                        {
-                            type: 'TH' + th + ' Пуш',
-                            description: 'Легенд-стиль: компактное ядро, ловушки у TH. Минимум звёзд в защите.',
-                            link: CC_BASE + '/bases/legend',
-                            rating: 9
-                        },
-                        {
-                            type: 'TH' + th + ' Пуш',
-                            description: 'Трёхслойная защита ратуши. Подходит для кубков и лиг.',
-                            link: ccBase,
-                            rating: 7
-                        },
-                        {
-                            type: 'TH' + th + ' Пуш',
-                            description: 'Сильное ядро, ловушки по секторам. Анти-воздух акцент.',
-                            link: wikiBase,
-                            rating: 8
-                        },
-                        {
-                            type: 'TH' + th + ' Пуш',
-                            description: 'Пуш-база с упором на периметр. Сложно взять 3 звезды.',
-                            link: CC_BASE + '/bases/legend',
-                            rating: 8
-                        }
+                    return [
+                        { type: 'TH' + th + ' Пуш', description: 'Legend-базы на ClashCodes. Защита ратуши, пуш кубков.', link: ccLegend, rating: 9 },
+                        { type: 'TH' + th + ' Пуш', description: 'Анти-воздух и анти-земля. Сложно взять 3 звезды.', link: ccLegend, rating: 8 },
+                        { type: 'TH' + th + ' Пуш', description: 'Легенд-стиль: компактное ядро, ловушки у TH.', link: ccLegend, rating: 9 },
+                        { type: 'TH' + th + ' Пуш', description: 'Трёхслойная защита ратуши. Подходит для кубков и лиг.', link: ccLegend, rating: 7 },
+                        { type: 'TH' + th + ' Пуш', description: 'Сильное ядро, ловушки по секторам.', link: ccLegend, rating: 8 },
+                        { type: 'TH' + th + ' Пуш', description: 'Пуш-базы. Все с ClashCodes → Legend Bases.', link: ccLegend, rating: 8 }
                     ];
                 }
-                var warBases = [{
-                        type: 'TH' + th + ' Война',
-                        description: 'Анти-3 звезды. Ратуша и ключевые постройки в ядре, ловушки по секторам.',
-                        link: ccWar,
-                        rating: 9,
-                        openLayoutId: th === 16 ? 'TH16:WB:AAAAAGAAAAAKOfe7qodr-ZAOJ31ivBv-z' : null
-                    },
-                    {
-                        type: 'TH' + th + ' Война',
-                        description: 'Войновая база с сильным периметром. Сложно лавалуням и эдрагам.',
-                        link: wikiWar,
-                        rating: 8
-                    },
-                    {
-                        type: 'TH' + th + ' Война',
-                        description: 'Анти-всё: сбалансированная защита от воздуха и земли. Топ для КВС.',
-                        link: wikiBase,
-                        rating: 9
-                    },
-                    {
-                        type: 'TH' + th + ' Война',
-                        description: 'Компактное ядро, ловушки на подходах. Анти-земля акцент.',
-                        link: ccWar,
-                        rating: 8
-                    },
-                    {
-                        type: 'TH' + th + ' Война',
-                        description: 'Секторная защита, сильные углы. Сложно для массовых атак.',
-                        link: wikiWar,
-                        rating: 7
-                    },
-                    {
-                        type: 'TH' + th + ' Война',
-                        description: 'Войновая база для КВС. Минимум звёзд в защите.',
-                        link: wikiBase,
-                        rating: 8
-                    }
+                return [
+                    { type: 'TH' + th + ' Война', description: 'Войновые базы на ClashCodes. Анти-3 звезды для КВС.', link: ccWar, rating: 9, openLayoutId: th === 16 ? 'TH16:WB:AAAAAGAAAAAKOfe7qodr-ZAOJ31ivBv-z' : null },
+                    { type: 'TH' + th + ' Война', description: 'Войновая база с сильным периметром. Сложно лавалуням и эдрагам.', link: ccWar, rating: 8 },
+                    { type: 'TH' + th + ' Война', description: 'Анти-всё: сбалансированная защита от воздуха и земли.', link: ccWar, rating: 9 },
+                    { type: 'TH' + th + ' Война', description: 'Компактное ядро, ловушки на подходах. Анти-земля.', link: ccWar, rating: 8 },
+                    { type: 'TH' + th + ' Война', description: 'Секторная защита, сильные углы. War bases — ClashCodes.', link: ccWar, rating: 7 },
+                    { type: 'TH' + th + ' Война', description: 'Войновая база для КВС. Все базы с clashcodes.com/bases/war', link: ccWar, rating: 8 }
                 ];
-                return warBases;
             }
             var PURPOSES = [{
                     id: 'farming',
@@ -771,7 +678,7 @@
     <main>
         <section id="hero" class="hero">
             <h1>Подбор баз Clash of Clans</h1>
-            <p>Выбери уровень ратуши и цель — получи проверенные базы с ClashCodes и Wiki. Фарм, пуш кубков или война клана.</p>
+            <p>Выбери уровень ратуши и цель — получи базы с <a href="https://clashcodes.com/bases/war" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">ClashCodes</a>. Фарм, пуш кубков или война клана.</p>
             <button type="button" class="cta" id="cta-pick-base" data-scroll="th-section">Подобрать базу →</button>
         </section>
 
