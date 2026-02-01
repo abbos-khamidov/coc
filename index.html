@@ -106,11 +106,12 @@
                         }
                     ];
                 }
-                return [{
+                var warBases = [{
                         type: 'TH' + th + ' Война',
                         description: 'Анти-3 звезды. Ратуша и ключевые постройки в ядре, ловушки по секторам.',
                         link: ccWar,
-                        rating: 9
+                        rating: 9,
+                        openLayoutId: th === 16 ? 'TH16:WB:AAAAAGAAAAAKOfe7qodr-ZAOJ31ivBv-z' : null
                     },
                     {
                         type: 'TH' + th + ' Война',
@@ -143,6 +144,7 @@
                         rating: 8
                     }
                 ];
+                return warBases;
             }
             var PURPOSES = [{
                     id: 'farming',
@@ -793,7 +795,7 @@
                 <a href="#" class="back-link" data-back="purpose">← Выбрать другую цель</a>
             </div>
             <h2 class="section-title">Твои базы</h2>
-            <p class="section-desc">Нажми «Скопировать и вставить в игру» — ссылка скопируется. Открой Clash of Clans → Настройки → Вставить ссылку базы и вставь.</p>
+            <p class="section-desc">Нажми «Открыть в игре» — ссылка скопируется и откроется игра (или страница CoC). Если база не подставилась — вставь ссылку в Настройках игры.</p>
             <div class="results-grid" id="results-grid"></div>
         </section>
 
@@ -819,7 +821,7 @@
                     <span class="num">3</span>
                     <div>
                         <h3>Открой ссылку или скопируй</h3>
-                        <p>Нажми «Вставить в игру» — ссылка скопируется в буфер. Или «Открыть страницу базы» — откроется сайт с лейаутом. Вставь ссылку в Clash of Clans в настройках.</p>
+                        <p>Нажми «Открыть в игре» — ссылка скопируется и откроется игра. Или «Открыть страницу базы» — откроется сайт с лейаутом.</p>
                     </div>
                 </div>
             </div>
@@ -935,10 +937,13 @@
                 purposeGrid.appendChild(card);
             });
 
+            var OPEN_LAYOUT_BASE = 'https://link.clashofclans.com/en?action=OpenLayout&id=';
             function renderResults(bases) {
                 const grid = document.getElementById('results-grid');
                 const thImg = getThImageUrl(state.th);
-                grid.innerHTML = bases.map((b, i) => `
+                grid.innerHTML = bases.map((b, i) => {
+                    var actionUrl = b.openLayoutId ? (OPEN_LAYOUT_BASE + encodeURIComponent(b.openLayoutId)) : b.link;
+                    return `
           <div class="base-card">
             <div class="img-wrap">
               <img src="${escapeAttr(thImg)}" alt="${escapeAttr(b.type)}" loading="lazy">
@@ -947,23 +952,24 @@
               <div class="title">${escapeHtml(b.type)} — база ${i + 1}</div>
               <div class="desc">${escapeHtml(b.description)}</div>
               <div class="rating">★ ${b.rating}/10</div>
-              <button type="button" class="link-btn" data-link="${escapeAttr(b.link)}">📋 Скопировать и вставить в игру</button>
+              <button type="button" class="link-btn" data-link="${escapeAttr(actionUrl)}">📱 Открыть в игре</button>
               <a href="${escapeAttr(b.link)}" target="_blank" rel="noopener" class="link-open">Открыть страницу базы</a>
             </div>
           </div>
-        `).join('');
+        `;
+                }).join('');
 
                 grid.querySelectorAll('.link-btn').forEach(btn => {
                     const link = btn.dataset.link;
                     if (!link) return;
                     btn.addEventListener('click', function() {
                         function doCopy() {
-                            btn.textContent = '✓ Скопировано! Открой CoC и вставь в настройках';
+                            btn.textContent = '✓ Открыто! Вставь в настройках, если нужно';
                             btn.classList.add('copied');
                             if (window.Telegram && window.Telegram.WebApp) {
                                 window.Telegram.WebApp.showPopup({
                                     title: 'Готово',
-                                    message: 'Ссылка скопирована. Если игра открылась — вставь ссылку в Настройках → Вставить ссылку базы.'
+                                    message: 'Игра должна открыться. Если база не подставилась — вставь ссылку в Настройках.'
                                 });
                             }
                             tryOpenGame();
