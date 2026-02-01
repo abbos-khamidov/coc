@@ -1,589 +1,944 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0d0d0f">
-  <title>CocBase — подбор баз Clash of Clans</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-  <script>
-    (function() {
-      var WIKI_BASE = 'https://clash-of-clans-wiki.com';
-      var CC_BASE = 'https://clashcodes.com';
-      function getThImageUrl(th) { return WIKI_BASE + '/pics/town_hall/th' + th + '_min.jpg'; }
-      function makeBases(th, purpose) {
-        var thStr = String(th), thWiki = 'th_' + th;
-        var ccFarm = CC_BASE + '/bases/th' + thStr + '-farming';
-        var ccWar = CC_BASE + '/bases/th' + thStr + '-war';
-        var ccBase = CC_BASE + '/bases/th' + thStr;
-        var wikiBase = WIKI_BASE + '/plans/' + thWiki + '/';
-        var wikiFarm = wikiBase + 'farm/';
-        var wikiWar = wikiBase + 'war/';
-        if (purpose === 'farming') {
-          return [
-            { type: 'TH' + th + ' Фарм', description: 'Защита ресурсов, компактный центр. Хорошо против масс гоблинов и банши.', link: ccFarm, rating: 9 },
-            { type: 'TH' + th + ' Фарм', description: 'Разнесённые хранилища, ловушки у складов. Меньше потерь при фарме.', link: wikiFarm, rating: 8 },
-            { type: 'TH' + th + ' Фарм', description: 'Анти-2 звезды, защита тёмного эликсира в ядре. Проверенный фарм-лейаут.', link: ccBase, rating: 9 },
-            { type: 'TH' + th + ' Фарм', description: 'Компактный центр, хранилища по кольцу. Удобно для фарма лиг.', link: ccFarm, rating: 7 },
-            { type: 'TH' + th + ' Фарм', description: 'Защита DE в ядре, ловушки на подходах. Меньше потерь от рейдов.', link: wikiFarm, rating: 8 },
-            { type: 'TH' + th + ' Фарм', description: 'Сбалансированный фарм: ресурсы и ратуша. Универсальный лейаут.', link: ccBase, rating: 8 }
-          ];
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0d0d0f">
+    <title>CocBase — подбор баз Clash of Clans</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+    <script>
+        (function() {
+            var WIKI_BASE = 'https://clash-of-clans-wiki.com';
+            var CC_BASE = 'https://clashcodes.com';
+
+            function getThImageUrl(th) {
+                return WIKI_BASE + '/pics/town_hall/th' + th + '_min.jpg';
+            }
+
+            function makeBases(th, purpose) {
+                var thStr = String(th),
+                    thWiki = 'th_' + th;
+                var ccFarm = CC_BASE + '/bases/th' + thStr + '-farming';
+                var ccWar = CC_BASE + '/bases/th' + thStr + '-war';
+                var ccBase = CC_BASE + '/bases/th' + thStr;
+                var wikiBase = WIKI_BASE + '/plans/' + thWiki + '/';
+                var wikiFarm = wikiBase + 'farm/';
+                var wikiWar = wikiBase + 'war/';
+                if (purpose === 'farming') {
+                    return [{
+                            type: 'TH' + th + ' Фарм',
+                            description: 'Защита ресурсов, компактный центр. Хорошо против масс гоблинов и банши.',
+                            link: ccFarm,
+                            rating: 9
+                        },
+                        {
+                            type: 'TH' + th + ' Фарм',
+                            description: 'Разнесённые хранилища, ловушки у складов. Меньше потерь при фарме.',
+                            link: wikiFarm,
+                            rating: 8
+                        },
+                        {
+                            type: 'TH' + th + ' Фарм',
+                            description: 'Анти-2 звезды, защита тёмного эликсира в ядре. Проверенный фарм-лейаут.',
+                            link: ccBase,
+                            rating: 9
+                        },
+                        {
+                            type: 'TH' + th + ' Фарм',
+                            description: 'Компактный центр, хранилища по кольцу. Удобно для фарма лиг.',
+                            link: ccFarm,
+                            rating: 7
+                        },
+                        {
+                            type: 'TH' + th + ' Фарм',
+                            description: 'Защита DE в ядре, ловушки на подходах. Меньше потерь от рейдов.',
+                            link: wikiFarm,
+                            rating: 8
+                        },
+                        {
+                            type: 'TH' + th + ' Фарм',
+                            description: 'Сбалансированный фарм: ресурсы и ратуша. Универсальный лейаут.',
+                            link: ccBase,
+                            rating: 8
+                        }
+                    ];
+                }
+                if (purpose === 'push') {
+                    return [{
+                            type: 'TH' + th + ' Пуш',
+                            description: 'Защита ратуши в центре, сильные точки по периметру. Для пуша кубков.',
+                            link: ccBase,
+                            rating: 9
+                        },
+                        {
+                            type: 'TH' + th + ' Пуш',
+                            description: 'Анти-воздух и анти-земля. Сложно взять 3 звезды на высоких лигах.',
+                            link: wikiBase,
+                            rating: 8
+                        },
+                        {
+                            type: 'TH' + th + ' Пуш',
+                            description: 'Легенд-стиль: компактное ядро, ловушки у TH. Минимум звёзд в защите.',
+                            link: CC_BASE + '/bases/legend',
+                            rating: 9
+                        },
+                        {
+                            type: 'TH' + th + ' Пуш',
+                            description: 'Трёхслойная защита ратуши. Подходит для кубков и лиг.',
+                            link: ccBase,
+                            rating: 7
+                        },
+                        {
+                            type: 'TH' + th + ' Пуш',
+                            description: 'Сильное ядро, ловушки по секторам. Анти-воздух акцент.',
+                            link: wikiBase,
+                            rating: 8
+                        },
+                        {
+                            type: 'TH' + th + ' Пуш',
+                            description: 'Пуш-база с упором на периметр. Сложно взять 3 звезды.',
+                            link: CC_BASE + '/bases/legend',
+                            rating: 8
+                        }
+                    ];
+                }
+                return [{
+                        type: 'TH' + th + ' Война',
+                        description: 'Анти-3 звезды. Ратуша и ключевые постройки в ядре, ловушки по секторам.',
+                        link: ccWar,
+                        rating: 9
+                    },
+                    {
+                        type: 'TH' + th + ' Война',
+                        description: 'Войновая база с сильным периметром. Сложно лавалуням и эдрагам.',
+                        link: wikiWar,
+                        rating: 8
+                    },
+                    {
+                        type: 'TH' + th + ' Война',
+                        description: 'Анти-всё: сбалансированная защита от воздуха и земли. Топ для КВС.',
+                        link: wikiBase,
+                        rating: 9
+                    },
+                    {
+                        type: 'TH' + th + ' Война',
+                        description: 'Компактное ядро, ловушки на подходах. Анти-земля акцент.',
+                        link: ccWar,
+                        rating: 8
+                    },
+                    {
+                        type: 'TH' + th + ' Война',
+                        description: 'Секторная защита, сильные углы. Сложно для массовых атак.',
+                        link: wikiWar,
+                        rating: 7
+                    },
+                    {
+                        type: 'TH' + th + ' Война',
+                        description: 'Войновая база для КВС. Минимум звёзд в защите.',
+                        link: wikiBase,
+                        rating: 8
+                    }
+                ];
+            }
+            var PURPOSES = [{
+                    id: 'farming',
+                    emoji: '🪙',
+                    title: 'Фарм ресурсов',
+                    desc: 'Защита золота и эликсира. Меньше потерь при фарме.'
+                },
+                {
+                    id: 'push',
+                    emoji: '🏆',
+                    title: 'Пуш кубков',
+                    desc: 'Защита ратуши, минимум звёзд в защите.'
+                },
+                {
+                    id: 'war',
+                    emoji: '⚔️',
+                    title: 'Война клана',
+                    desc: 'Анти-3 звезды для КВС и войн.'
+                }
+            ];
+            var TH_LEVELS = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+            window.CocBaseData = {
+                getThImageUrl: getThImageUrl,
+                makeBases: makeBases,
+                PURPOSES: PURPOSES,
+                TH_LEVELS: TH_LEVELS
+            };
+        })();
+    </script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        if (purpose === 'push') {
-          return [
-            { type: 'TH' + th + ' Пуш', description: 'Защита ратуши в центре, сильные точки по периметру. Для пуша кубков.', link: ccBase, rating: 9 },
-            { type: 'TH' + th + ' Пуш', description: 'Анти-воздух и анти-земля. Сложно взять 3 звезды на высоких лигах.', link: wikiBase, rating: 8 },
-            { type: 'TH' + th + ' Пуш', description: 'Легенд-стиль: компактное ядро, ловушки у TH. Минимум звёзд в защите.', link: CC_BASE + '/bases/legend', rating: 9 },
-            { type: 'TH' + th + ' Пуш', description: 'Трёхслойная защита ратуши. Подходит для кубков и лиг.', link: ccBase, rating: 7 },
-            { type: 'TH' + th + ' Пуш', description: 'Сильное ядро, ловушки по секторам. Анти-воздух акцент.', link: wikiBase, rating: 8 },
-            { type: 'TH' + th + ' Пуш', description: 'Пуш-база с упором на периметр. Сложно взять 3 звезды.', link: CC_BASE + '/bases/legend', rating: 8 }
-          ];
+
+        :root {
+            --bg: #0d0d0f;
+            --bg-card: #141418;
+            --bg-card-hover: #1a1a20;
+            --surface: #18181c;
+            --text: #f4f4f5;
+            --text-muted: #b4b4bc;
+            --accent: #d4a012;
+            --accent-soft: rgba(212, 160, 18, 0.2);
+            --success: #22c55e;
+            --border: #27272a;
+            --radius: 16px;
+            --radius-sm: 12px;
+            --font: 'Outfit', -apple-system, sans-serif;
+            --header-h: 64px;
+            --section-pad: clamp(28px, 6vw, 64px);
+            --content-max: min(1600px, 96vw);
         }
-        return [
-          { type: 'TH' + th + ' Война', description: 'Анти-3 звезды. Ратуша и ключевые постройки в ядре, ловушки по секторам.', link: ccWar, rating: 9 },
-          { type: 'TH' + th + ' Война', description: 'Войновая база с сильным периметром. Сложно лавалуням и эдрагам.', link: wikiWar, rating: 8 },
-          { type: 'TH' + th + ' Война', description: 'Анти-всё: сбалансированная защита от воздуха и земли. Топ для КВС.', link: wikiBase, rating: 9 },
-          { type: 'TH' + th + ' Война', description: 'Компактное ядро, ловушки на подходах. Анти-земля акцент.', link: ccWar, rating: 8 },
-          { type: 'TH' + th + ' Война', description: 'Секторная защита, сильные углы. Сложно для массовых атак.', link: wikiWar, rating: 7 },
-          { type: 'TH' + th + ' Война', description: 'Войновая база для КВС. Минимум звёзд в защите.', link: wikiBase, rating: 8 }
-        ];
-      }
-      var PURPOSES = [
-        { id: 'farming', emoji: '🪙', title: 'Фарм ресурсов', desc: 'Защита золота и эликсира. Меньше потерь при фарме.' },
-        { id: 'push', emoji: '🏆', title: 'Пуш кубков', desc: 'Защита ратуши, минимум звёзд в защите.' },
-        { id: 'war', emoji: '⚔️', title: 'Война клана', desc: 'Анти-3 звезды для КВС и войн.' }
-      ];
-      var TH_LEVELS = [6,7,8,9,10,11,12,13,14,15,16];
-      window.CocBaseData = { getThImageUrl: getThImageUrl, makeBases: makeBases, PURPOSES: PURPOSES, TH_LEVELS: TH_LEVELS };
-    })();
-  </script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0d0d0f;
-      --bg-card: #141418;
-      --bg-card-hover: #1a1a20;
-      --surface: #18181c;
-      --text: #f4f4f5;
-      --text-muted: #b4b4bc;
-      --accent: #d4a012;
-      --accent-soft: rgba(212, 160, 18, 0.2);
-      --success: #22c55e;
-      --border: #27272a;
-      --radius: 16px;
-      --radius-sm: 12px;
-      --font: 'Outfit', -apple-system, sans-serif;
-      --header-h: 64px;
-      --section-pad: clamp(28px, 6vw, 64px);
-      --content-max: min(1600px, 96vw);
-    }
-    html { scroll-behavior: smooth; font-size: 18px; }
-    @media (min-width: 1200px) { html { font-size: 19px; } }
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
-    }
 
-    /* Header */
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      height: var(--header-h);
-      padding: 0 clamp(20px, 4vw, 40px);
-      max-width: 100%;
-      background: rgba(13, 13, 15, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .logo-link {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--text);
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
-    .logo-link span { color: var(--accent); }
-    .nav {
-      display: flex;
-      gap: 12px;
-    }
-    .nav a {
-      padding: 10px 18px;
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.05rem;
-      border-radius: var(--radius-sm);
-      transition: color 0.2s, background 0.2s;
-    }
-    .nav a:hover { color: var(--text); background: var(--surface); }
+        html {
+            scroll-behavior: smooth;
+            font-size: 18px;
+        }
 
-    /* Sections common */
-    section {
-      padding: var(--section-pad) clamp(20px, 4vw, 48px);
-      max-width: var(--content-max);
-      margin: 0 auto;
-      width: 100%;
-    }
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 800;
-      margin-bottom: 12px;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      color: var(--text);
-    }
-    .section-desc {
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-bottom: 28px;
-      max-width: 640px;
-    }
+        @media (min-width: 1200px) {
+            html {
+                font-size: 19px;
+            }
+        }
 
-    /* Hero */
-    .hero {
-      min-height: calc(100vh - var(--header-h) - 80px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding-top: 40px;
-      padding-bottom: 60px;
-    }
-    .hero h1 {
-      font-size: clamp(2.4rem, 8vw, 4rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
-      margin-bottom: 20px;
-      background: linear-gradient(180deg, #fff 0%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero p {
-      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-      color: var(--text-muted);
-      max-width: 560px;
-      margin-bottom: 36px;
-      line-height: 1.65;
-    }
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 16px 32px;
-      background: var(--accent);
-      color: #0d0d0f;
-      font-family: var(--font);
-      font-size: 1.1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
-    }
-    .cta:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212, 160, 18, 0.35); }
-    .cta:active { transform: translateY(0); }
-    button.cta { cursor: pointer; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+        }
 
-    /* TH Grid — карточки с фото ратуш */
-    #th-section .section-title { text-align: center; }
-    #th-section .section-desc { text-align: center; margin-left: auto; margin-right: auto; }
-    .th-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: clamp(12px, 2vw, 20px);
-      justify-items: stretch;
-    }
-    @media (min-width: 480px) { .th-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 700px) { .th-grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (min-width: 1000px) { .th-grid { grid-template-columns: repeat(6, 1fr); } }
-    @media (min-width: 1400px) { .th-grid { grid-template-columns: repeat(11, 1fr); gap: 16px; } }
-    .th-card {
-      width: 100%;
-      max-width: none;
-      aspect-ratio: 1;
-      background: var(--bg-card);
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: stretch;
-      text-decoration: none;
-      color: inherit;
-    }
-    .th-card:hover, .th-card:focus {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.35);
-    }
-    .th-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-    .th-card.selected .th-label-desc { color: var(--accent); }
-    .th-card.selected .th-label-desc::after { content: ' ✓'; font-weight: 700; }
-    .th-card .th-img {
-      width: 100%;
-      flex: 1;
-      min-height: 0;
-      object-fit: contain;
-      padding: clamp(16px, 3vw, 24px);
-      display: block;
-    }
-    .th-card .th-label-wrap {
-      width: 100%;
-      background: var(--surface);
-      padding: 14px 12px;
-      flex-shrink: 0;
-      text-align: center;
-    }
-    .th-card .th-label {
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      font-weight: 700;
-      font-size: 1.2rem;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.08em;
-      display: block;
-      line-height: 1.2;
-    }
-    .th-card .th-label-desc {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-weight: 500;
-    }
-    .th-card .th-label-fallback { font-size: 1.6rem; padding: 28px; }
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: var(--header-h);
+            padding: 0 clamp(20px, 4vw, 40px);
+            max-width: 100%;
+            background: rgba(13, 13, 15, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-    /* Purpose */
-    .purpose-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    @media (min-width: 560px) { .purpose-grid { grid-template-columns: repeat(3, 1fr); } }
-    .purpose-card {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 24px;
-      background: var(--bg-card);
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s, background 0.2s;
-      text-align: left;
-    }
-    .purpose-card:hover, .purpose-card:focus {
-      border-color: var(--accent);
-      background: var(--bg-card-hover);
-      transform: translateY(-2px);
-    }
-    .purpose-card .emoji { font-size: 2.75rem; margin-bottom: 14px; }
-    .purpose-card .title { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
-    .purpose-card .desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.5; }
+        .logo-link {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
 
-    /* Results */
-    .results-grid {
-      display: grid;
-      gap: clamp(20px, 3vw, 28px);
-    }
-    @media (min-width: 500px) { .results-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 800px) { .results-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 1100px) { .results-grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (min-width: 1400px) { .results-grid { grid-template-columns: repeat(5, 1fr); } }
-    .base-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: box-shadow 0.2s, border-color 0.2s;
-    }
-    .base-card:hover { border-color: var(--border); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
-    .base-card .img-wrap {
-      aspect-ratio: 1;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .base-card .img-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .base-card .body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
-    .base-card .title { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; line-height: 1.35; }
-    .base-card .desc { font-size: 1rem; color: var(--text-muted); margin-bottom: 14px; flex: 1; line-height: 1.5; }
-    .base-card .rating { font-size: 1rem; color: var(--accent); margin-bottom: 18px; }
-    .base-card .link-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 16px 22px;
-      background: var(--success);
-      color: #fff;
-      font-family: var(--font);
-      font-size: 1.05rem;
-      font-weight: 600;
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      text-decoration: none;
-      transition: filter 0.2s, transform 0.15s;
-    }
-    .base-card .link-btn:hover { filter: brightness(1.08); }
-    .base-card .link-btn:active { transform: scale(0.98); }
-    .base-card .link-btn.copied { opacity: 0.9; }
-    .base-card .link-open {
-      display: block;
-      margin-top: 12px;
-      text-align: center;
-      font-size: 1rem;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-      transition: opacity 0.2s;
-    }
-    .base-card .link-open:hover { opacity: 0.9; }
+        .logo-link span {
+            color: var(--accent);
+        }
 
-    /* Help */
-    .help-steps {
-      display: grid;
-      gap: 28px;
-      max-width: 720px;
-    }
-    .help-step {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-    .help-step .num {
-      width: 40px;
-      height: 40px;
-      flex-shrink: 0;
-      background: var(--accent-soft);
-      color: var(--accent);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1.1rem;
-    }
-    .help-step h3 { font-size: 1.2rem; margin-bottom: 8px; }
-    .help-step p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.55; }
-    .help-in-game {
-      margin-top: 36px;
-      padding: 28px;
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-    }
-    .help-in-game h3 { margin-bottom: 14px; font-size: 1.2rem; }
-    .help-in-game ol { margin-left: 24px; color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; }
-    .help-in-game li { margin-bottom: 10px; }
+        .nav {
+            display: flex;
+            gap: 12px;
+        }
 
-    /* State: hide/show */
-    .flow-step { display: none; }
-    .flow-step.active { display: block; }
-    .results-section .back-row { margin-bottom: 20px; }
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: opacity 0.2s;
-    }
-    .back-link:hover { opacity: 0.9; }
+        .nav a {
+            padding: 10px 18px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border-radius: var(--radius-sm);
+            transition: color 0.2s, background 0.2s;
+        }
 
-    /* Telegram */
-    body.tg-ready .header { background: var(--tg-theme-secondary-bg-color, rgba(13,13,15,0.9)); }
-  </style>
+        .nav a:hover {
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        /* Sections common */
+        section {
+            padding: var(--section-pad) clamp(20px, 4vw, 48px);
+            max-width: var(--content-max);
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            color: var(--text);
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 28px;
+            max-width: 640px;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: calc(100vh - var(--header-h) - 80px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 8vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+            color: var(--text-muted);
+            max-width: 560px;
+            margin-bottom: 36px;
+            line-height: 1.65;
+        }
+
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: var(--accent);
+            color: #0d0d0f;
+            font-family: var(--font);
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+        }
+
+        .cta:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(212, 160, 18, 0.35);
+        }
+
+        .cta:active {
+            transform: translateY(0);
+        }
+
+        button.cta {
+            cursor: pointer;
+        }
+
+        /* TH Grid — карточки с фото ратуш */
+        #th-section .section-title {
+            text-align: center;
+        }
+
+        #th-section .section-desc {
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .th-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(12px, 2vw, 20px);
+            justify-items: stretch;
+        }
+
+        @media (min-width: 480px) {
+            .th-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 700px) {
+            .th-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1000px) {
+            .th-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .th-grid {
+                grid-template-columns: repeat(11, 1fr);
+                gap: 16px;
+            }
+        }
+
+        .th-card {
+            width: 100%;
+            max-width: none;
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: stretch;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .th-card:hover,
+        .th-card:focus {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        .th-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .th-card.selected .th-label-desc {
+            color: var(--accent);
+        }
+
+        .th-card.selected .th-label-desc::after {
+            content: ' ✓';
+            font-weight: 700;
+        }
+
+        .th-card .th-img {
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            object-fit: contain;
+            padding: clamp(16px, 3vw, 24px);
+            display: block;
+        }
+
+        .th-card .th-label-wrap {
+            width: 100%;
+            background: var(--surface);
+            padding: 14px 12px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .th-card .th-label {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.08em;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .th-card .th-label-desc {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .th-card .th-label-fallback {
+            font-size: 1.6rem;
+            padding: 28px;
+        }
+
+        /* Purpose */
+        .purpose-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 560px) {
+            .purpose-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .purpose-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 24px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s, background 0.2s;
+            text-align: left;
+        }
+
+        .purpose-card:hover,
+        .purpose-card:focus {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+        }
+
+        .purpose-card .emoji {
+            font-size: 2.75rem;
+            margin-bottom: 14px;
+        }
+
+        .purpose-card .title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .purpose-card .desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Results */
+        .results-grid {
+            display: grid;
+            gap: clamp(20px, 3vw, 28px);
+        }
+
+        @media (min-width: 500px) {
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 800px) {
+            .results-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1100px) {
+            .results-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .results-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .base-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .base-card:hover {
+            border-color: var(--border);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .base-card .img-wrap {
+            aspect-ratio: 1;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .base-card .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .base-card .body {
+            padding: 22px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .base-card .title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.35;
+        }
+
+        .base-card .desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .base-card .rating {
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 18px;
+        }
+
+        .base-card .link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 22px;
+            background: var(--success);
+            color: #fff;
+            font-family: var(--font);
+            font-size: 1.05rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            text-decoration: none;
+            transition: filter 0.2s, transform 0.15s;
+        }
+
+        .base-card .link-btn:hover {
+            filter: brightness(1.08);
+        }
+
+        .base-card .link-btn:active {
+            transform: scale(0.98);
+        }
+
+        .base-card .link-btn.copied {
+            opacity: 0.9;
+        }
+
+        .base-card .link-open {
+            display: block;
+            margin-top: 12px;
+            text-align: center;
+            font-size: 1rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .base-card .link-open:hover {
+            opacity: 0.9;
+        }
+
+        /* Help */
+        .help-steps {
+            display: grid;
+            gap: 28px;
+            max-width: 720px;
+        }
+
+        .help-step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .help-step .num {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .help-step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .help-step p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.55;
+        }
+
+        .help-in-game {
+            margin-top: 36px;
+            padding: 28px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .help-in-game h3 {
+            margin-bottom: 14px;
+            font-size: 1.2rem;
+        }
+
+        .help-in-game ol {
+            margin-left: 24px;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .help-in-game li {
+            margin-bottom: 10px;
+        }
+
+        /* State: hide/show */
+        .flow-step {
+            display: none;
+        }
+
+        .flow-step.active {
+            display: block;
+        }
+
+        .results-section .back-row {
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.9;
+        }
+
+        /* Telegram */
+        body.tg-ready .header {
+            background: var(--tg-theme-secondary-bg-color, rgba(13, 13, 15, 0.9));
+        }
+    </style>
 </head>
+
 <body>
-  <header class="header">
-    <a href="#hero" class="logo-link" data-scroll="hero">Coc<span>Base</span></a>
-    <nav class="nav">
-      <a href="#th-section" data-scroll="th-section">Подбор</a>
-      <a href="#help" data-scroll="help">Помощь</a>
-    </nav>
-  </header>
+    <header class="header">
+        <a href="#hero" class="logo-link" data-scroll="hero">Coc<span>Base</span></a>
+        <nav class="nav">
+            <a href="#th-section" data-scroll="th-section">Подбор</a>
+            <a href="#help" data-scroll="help">Помощь</a>
+        </nav>
+    </header>
 
-  <main>
-    <section id="hero" class="hero">
-      <h1>Подбор баз Clash of Clans</h1>
-      <p>Выбери уровень ратуши и цель — получи проверенные базы с ClashCodes и Wiki. Фарм, пуш кубков или война клана.</p>
-      <button type="button" class="cta" id="cta-pick-base" data-scroll="th-section">Подобрать базу →</button>
-    </section>
+    <main>
+        <section id="hero" class="hero">
+            <h1>Подбор баз Clash of Clans</h1>
+            <p>Выбери уровень ратуши и цель — получи проверенные базы с ClashCodes и Wiki. Фарм, пуш кубков или война клана.</p>
+            <button type="button" class="cta" id="cta-pick-base" data-scroll="th-section">Подобрать базу →</button>
+        </section>
 
-    <section id="th-section">
-      <h2 class="section-title">Выбери уровень ратуши</h2>
-      <p class="section-desc">От TH6 до TH16 — кликни по карточке. После этого выбери цель: фарм, пуш или война.</p>
-      <div class="th-grid" id="th-grid"></div>
-    </section>
+        <section id="th-section">
+            <h2 class="section-title">Выбери уровень ратуши</h2>
+            <p class="section-desc">От TH6 до TH16 — кликни по карточке. После этого выбери цель: фарм, пуш или война.</p>
+            <div class="th-grid" id="th-grid"></div>
+        </section>
 
-    <section id="purpose-section" class="flow-step">
-      <div class="back-row">
-        <a href="#" class="back-link" data-back="th">← Другой TH</a>
-      </div>
-      <h2 class="section-title">Для чего нужна база?</h2>
-      <p class="section-desc">Выбери один вариант — покажем 6 подходящих баз с описанием и ссылками.</p>
-      <div class="purpose-grid" id="purpose-grid"></div>
-    </section>
+        <section id="purpose-section" class="flow-step">
+            <div class="back-row">
+                <a href="#" class="back-link" data-back="th">← Другой TH</a>
+            </div>
+            <h2 class="section-title">Для чего нужна база?</h2>
+            <p class="section-desc">Выбери один вариант — покажем 6 подходящих баз с описанием и ссылками.</p>
+            <div class="purpose-grid" id="purpose-grid"></div>
+        </section>
 
-    <section id="results-section" class="results-section flow-step">
-      <div class="back-row">
-        <a href="#" class="back-link" data-back="purpose">← Выбрать другую цель</a>
-      </div>
-      <h2 class="section-title">Твои базы</h2>
-      <p class="section-desc">Нажми «Скопировать и вставить в игру» — ссылка скопируется. Открой Clash of Clans → Настройки → Вставить ссылку базы и вставь.</p>
-      <div class="results-grid" id="results-grid"></div>
-    </section>
+        <section id="results-section" class="results-section flow-step">
+            <div class="back-row">
+                <a href="#" class="back-link" data-back="purpose">← Выбрать другую цель</a>
+            </div>
+            <h2 class="section-title">Твои базы</h2>
+            <p class="section-desc">Нажми «Скопировать и вставить в игру» — ссылка скопируется. Открой Clash of Clans → Настройки → Вставить ссылку базы и вставь.</p>
+            <div class="results-grid" id="results-grid"></div>
+        </section>
 
-    <section id="help">
-      <h2 class="section-title">Помощь</h2>
-      <p class="section-desc">Как пользоваться CocBase и как вставить базу в игру.</p>
-      <div class="help-steps">
-        <div class="help-step">
-          <span class="num">1</span>
-          <div>
-            <h3>Выбери уровень ратуши</h3>
-            <p>На главной нажми «Подобрать базу» и кликни по карточке с нужной ратушей (TH6–TH16).</p>
-          </div>
-        </div>
-        <div class="help-step">
-          <span class="num">2</span>
-          <div>
-            <h3>Выбери цель</h3>
-            <p>Фарм — защита ресурсов. Пуш — защита ратуши и кубков. Война — анти-3 звезды для КВС.</p>
-          </div>
-        </div>
-        <div class="help-step">
-          <span class="num">3</span>
-          <div>
-            <h3>Открой ссылку или скопируй</h3>
-            <p>Нажми «Вставить в игру» — ссылка скопируется в буфер. Или «Открыть страницу базы» — откроется сайт с лейаутом. Вставь ссылку в Clash of Clans в настройках.</p>
-          </div>
-        </div>
-      </div>
-      <div class="help-in-game">
-        <h3>Как вставить базу в игру</h3>
-        <ol>
-          <li>Открой Clash of Clans.</li>
-          <li>Настройки (шестерёнка) → «Связать устройство» или «Вставить ссылку базы».</li>
-          <li>Вставь скопированную ссылку — база подставится в редактор.</li>
-        </ol>
-      </div>
-    </section>
-  </main>
+        <section id="help">
+            <h2 class="section-title">Помощь</h2>
+            <p class="section-desc">Как пользоваться CocBase и как вставить базу в игру.</p>
+            <div class="help-steps">
+                <div class="help-step">
+                    <span class="num">1</span>
+                    <div>
+                        <h3>Выбери уровень ратуши</h3>
+                        <p>На главной нажми «Подобрать базу» и кликни по карточке с нужной ратушей (TH6–TH16).</p>
+                    </div>
+                </div>
+                <div class="help-step">
+                    <span class="num">2</span>
+                    <div>
+                        <h3>Выбери цель</h3>
+                        <p>Фарм — защита ресурсов. Пуш — защита ратуши и кубков. Война — анти-3 звезды для КВС.</p>
+                    </div>
+                </div>
+                <div class="help-step">
+                    <span class="num">3</span>
+                    <div>
+                        <h3>Открой ссылку или скопируй</h3>
+                        <p>Нажми «Вставить в игру» — ссылка скопируется в буфер. Или «Открыть страницу базы» — откроется сайт с лейаутом. Вставь ссылку в Clash of Clans в настройках.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="help-in-game">
+                <h3>Как вставить базу в игру</h3>
+                <ol>
+                    <li>Открой Clash of Clans.</li>
+                    <li>Настройки (шестерёнка) → «Связать устройство» или «Вставить ссылку базы».</li>
+                    <li>Вставь скопированную ссылку — база подставится в редактор.</li>
+                </ol>
+            </div>
+        </section>
+    </main>
 
-  <script>
-    (function() {
-      if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
-        document.body.classList.add('tg-ready');
-      }
+    <script>
+        (function() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
+                document.body.classList.add('tg-ready');
+            }
 
-      const D = window.CocBaseData;
-      if (!D) { console.error('CocBaseData missing'); return; }
-      const { getThImageUrl, makeBases, PURPOSES, TH_LEVELS } = D;
+            const D = window.CocBaseData;
+            if (!D) {
+                console.error('CocBaseData missing');
+                return;
+            }
+            const {
+                getThImageUrl,
+                makeBases,
+                PURPOSES,
+                TH_LEVELS
+            } = D;
 
-      let state = { th: null, purpose: null };
+            let state = {
+                th: null,
+                purpose: null
+            };
 
-      function scrollToSection(id) {
-        const target = document.getElementById(id);
-        if (!target) return;
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+            function scrollToSection(id) {
+                const target = document.getElementById(id);
+                if (!target) return;
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
 
-      document.querySelectorAll('[data-scroll]').forEach(el => {
-        el.addEventListener('click', function(e) {
-          e.preventDefault();
-          const id = this.getAttribute('data-scroll');
-          if (id) scrollToSection(id);
-        });
-      });
+            document.querySelectorAll('[data-scroll]').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-scroll');
+                    if (id) scrollToSection(id);
+                });
+            });
 
-      var ctaBtn = document.getElementById('cta-pick-base');
-      if (ctaBtn) {
-        ctaBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          scrollToSection('th-section');
-        });
-      }
+            var ctaBtn = document.getElementById('cta-pick-base');
+            if (ctaBtn) {
+                ctaBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    scrollToSection('th-section');
+                });
+            }
 
-      const thGrid = document.getElementById('th-grid');
-      TH_LEVELS.forEach(th => {
-        const card = document.createElement('a');
-        card.href = '#purpose-section';
-        card.className = 'th-card';
-        card.setAttribute('data-th', th);
-        card.innerHTML = `
+            const thGrid = document.getElementById('th-grid');
+            TH_LEVELS.forEach(th => {
+                const card = document.createElement('a');
+                card.href = '#purpose-section';
+                card.className = 'th-card';
+                card.setAttribute('data-th', th);
+                card.innerHTML = `
           <img class="th-img" src="${getThImageUrl(th)}" alt="Расстановка TH${th}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling?.querySelector('.th-label')?.classList.add('th-label-fallback')">
           <div class="th-label-wrap">
             <span class="th-label">TH${th}</span>
             <span class="th-label-desc">Расстановка базы</span>
           </div>
         `;
-        card.addEventListener('click', function(e) {
-          e.preventDefault();
-          state.th = th;
-          document.querySelectorAll('.th-card').forEach(c => c.classList.remove('selected'));
-          this.classList.add('selected');
-          document.getElementById('purpose-section').classList.add('active');
-          document.getElementById('results-section').classList.remove('active');
-          document.getElementById('purpose-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        thGrid.appendChild(card);
-      });
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    state.th = th;
+                    document.querySelectorAll('.th-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('purpose-section').classList.add('active');
+                    document.getElementById('results-section').classList.remove('active');
+                    document.getElementById('purpose-section').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+                thGrid.appendChild(card);
+            });
 
-      const purposeGrid = document.getElementById('purpose-grid');
-      PURPOSES.forEach(p => {
-        const card = document.createElement('button');
-        card.type = 'button';
-        card.className = 'purpose-card';
-        card.setAttribute('data-purpose', p.id);
-        card.innerHTML = `
+            const purposeGrid = document.getElementById('purpose-grid');
+            PURPOSES.forEach(p => {
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'purpose-card';
+                card.setAttribute('data-purpose', p.id);
+                card.innerHTML = `
           <span class="emoji">${p.emoji}</span>
           <span class="title">${p.title}</span>
           <span class="desc">${p.desc}</span>
         `;
-        card.addEventListener('click', () => {
-          state.purpose = p.id;
-          const bases = makeBases(state.th, state.purpose);
-          renderResults(bases);
-          document.getElementById('results-section').classList.add('active');
-          document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
-        });
-        purposeGrid.appendChild(card);
-      });
+                card.addEventListener('click', () => {
+                    state.purpose = p.id;
+                    const bases = makeBases(state.th, state.purpose);
+                    renderResults(bases);
+                    document.getElementById('results-section').classList.add('active');
+                    document.getElementById('results-section').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+                purposeGrid.appendChild(card);
+            });
 
-      function renderResults(bases) {
-        const grid = document.getElementById('results-grid');
-        const thImg = getThImageUrl(state.th);
-        grid.innerHTML = bases.map((b, i) => `
+            function renderResults(bases) {
+                const grid = document.getElementById('results-grid');
+                const thImg = getThImageUrl(state.th);
+                grid.innerHTML = bases.map((b, i) => `
           <div class="base-card">
             <div class="img-wrap">
               <img src="${escapeAttr(thImg)}" alt="${escapeAttr(b.type)}" loading="lazy">
@@ -598,66 +953,94 @@
           </div>
         `).join('');
 
-        grid.querySelectorAll('.link-btn').forEach(btn => {
-          const link = btn.dataset.link;
-          if (!link) return;
-          btn.addEventListener('click', function() {
-            function doCopy() {
-              btn.textContent = '✓ Скопировано! Открой CoC и вставь в настройках';
-              btn.classList.add('copied');
-              if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.showPopup({ title: 'Готово', message: 'Ссылка скопирована. Если игра открылась — вставь ссылку в Настройках → Вставить ссылку базы.' });
-              }
-              tryOpenGame();
-            }
-            function tryOpenGame() {
-              var schemes = ['clashofclans://', 'supercell-clashofclans://'];
-              var a = document.createElement('a');
-              a.href = schemes[0];
-              a.style.display = 'none';
-              document.body.appendChild(a);
-              setTimeout(function() {
-                try { a.click(); } catch (e) {}
-                document.body.removeChild(a);
-              }, 100);
-            }
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(link).then(doCopy).catch(fallbackCopy);
-            } else { fallbackCopy(); }
-            function fallbackCopy() {
-              var ta = document.createElement('textarea');
-              ta.value = link; ta.style.position = 'fixed'; ta.style.opacity = '0';
-              document.body.appendChild(ta); ta.select();
-              try { document.execCommand('copy'); } catch (e) {}
-              document.body.removeChild(ta);
-              doCopy();
-            }
-          });
-        });
-      }
+                grid.querySelectorAll('.link-btn').forEach(btn => {
+                    const link = btn.dataset.link;
+                    if (!link) return;
+                    btn.addEventListener('click', function() {
+                        function doCopy() {
+                            btn.textContent = '✓ Скопировано! Открой CoC и вставь в настройках';
+                            btn.classList.add('copied');
+                            if (window.Telegram && window.Telegram.WebApp) {
+                                window.Telegram.WebApp.showPopup({
+                                    title: 'Готово',
+                                    message: 'Ссылка скопирована. Если игра открылась — вставь ссылку в Настройках → Вставить ссылку базы.'
+                                });
+                            }
+                            tryOpenGame();
+                        }
 
-      document.querySelectorAll('.back-link[data-back="th"]').forEach(a => {
-        a.addEventListener('click', function(e) {
-          e.preventDefault();
-          document.getElementById('purpose-section').classList.remove('active');
-          document.getElementById('results-section').classList.remove('active');
-          document.querySelectorAll('.th-card').forEach(c => c.classList.remove('selected'));
-          state.th = null;
-          state.purpose = null;
-          document.getElementById('th-section').scrollIntoView({ behavior: 'smooth' });
-        });
-      });
-      document.querySelectorAll('.back-link[data-back="purpose"]').forEach(a => {
-        a.addEventListener('click', function(e) {
-          e.preventDefault();
-          document.getElementById('results-section').classList.remove('active');
-          document.getElementById('purpose-section').scrollIntoView({ behavior: 'smooth' });
-        });
-      });
+                        function tryOpenGame() {
+                            var openUrl = (link.indexOf('link.clashofclans.com') !== -1) ?
+                                link :
+                                'https://link.clashofclans.com/en';
+                            var a = document.createElement('a');
+                            a.href = openUrl;
+                            a.target = '_blank';
+                            a.rel = 'noopener';
+                            a.style.display = 'none';
+                            document.body.appendChild(a);
+                            setTimeout(function() {
+                                try {
+                                    a.click();
+                                } catch (e) {}
+                                document.body.removeChild(a);
+                            }, 150);
+                        }
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(link).then(doCopy).catch(fallbackCopy);
+                        } else {
+                            fallbackCopy();
+                        }
 
-      function escapeAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-      function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    })();
-  </script>
+                        function fallbackCopy() {
+                            var ta = document.createElement('textarea');
+                            ta.value = link;
+                            ta.style.position = 'fixed';
+                            ta.style.opacity = '0';
+                            document.body.appendChild(ta);
+                            ta.select();
+                            try {
+                                document.execCommand('copy');
+                            } catch (e) {}
+                            document.body.removeChild(ta);
+                            doCopy();
+                        }
+                    });
+                });
+            }
+
+            document.querySelectorAll('.back-link[data-back="th"]').forEach(a => {
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('purpose-section').classList.remove('active');
+                    document.getElementById('results-section').classList.remove('active');
+                    document.querySelectorAll('.th-card').forEach(c => c.classList.remove('selected'));
+                    state.th = null;
+                    state.purpose = null;
+                    document.getElementById('th-section').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            document.querySelectorAll('.back-link[data-back="purpose"]').forEach(a => {
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('results-section').classList.remove('active');
+                    document.getElementById('purpose-section').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            function escapeAttr(s) {
+                return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }
+
+            function escapeHtml(s) {
+                return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            }
+        })();
+    </script>
 </body>
+
 </html>
