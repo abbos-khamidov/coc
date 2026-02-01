@@ -438,6 +438,14 @@
         }
 
         /* Results */
+        .results-loading {
+            grid-column: 1 / -1;
+            padding: 48px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
         .results-grid {
             display: grid;
             gap: clamp(20px, 3vw, 28px);
@@ -834,11 +842,18 @@
         `;
                 card.addEventListener('click', () => {
                     state.purpose = p.id;
-                    const bases = makeBases(state.th, state.purpose);
-                    renderResults(bases);
+                    const grid = document.getElementById('results-grid');
+                    grid.innerHTML = '<div class="results-loading">Загрузка баз с ClashCodes…</div>';
                     document.getElementById('results-section').classList.add('active');
-                    document.getElementById('results-section').scrollIntoView({
-                        behavior: 'smooth'
+                    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+                    var apiBase = (window.location.pathname || '').replace(/\/?index\.html$/, '') || '';
+                    if (apiBase && !apiBase.startsWith('/')) apiBase = '/' + apiBase;
+                    var apiUrl = (window.location.origin || '') + apiBase + '/api/bases?th=' + encodeURIComponent(state.th) + '&purpose=' + encodeURIComponent(state.purpose);
+                    fetch(apiUrl).then(function(r) { return r.ok ? r.json() : Promise.reject(new Error('API error')); }).then(function(bases) {
+                        if (Array.isArray(bases) && bases.length) renderResults(bases);
+                        else renderResults(makeBases(state.th, state.purpose));
+                    }).catch(function() {
+                        renderResults(makeBases(state.th, state.purpose));
                     });
                 });
                 purposeGrid.appendChild(card);
@@ -848,19 +863,23 @@
             function renderResults(bases) {
                 const grid = document.getElementById('results-grid');
                 const thImg = getThImageUrl(state.th);
-                grid.innerHTML = bases.map((b, i) => {
-                    var actionUrl = b.openLayoutId ? (OPEN_LAYOUT_BASE + encodeURIComponent(b.openLayoutId)) : b.link;
+                var list = Array.isArray(bases) ? bases.slice(0, 6) : [];
+                if (!list.length) list = makeBases(state.th, state.purpose);
+                grid.innerHTML = list.map((b, i) => {
+                    var actionUrl = b.openLayoutId ? (OPEN_LAYOUT_BASE + encodeURIComponent(b.openLayoutId)) : (b.link || '');
+                    var imgSrc = (b.image_url && b.image_url.indexOf('http') === 0) ? b.image_url : thImg;
+                    var ratingText = (b.rating_display != null) ? b.rating_display : (typeof b.rating === 'number' ? b.rating + '/10' : (b.rating || '—/10'));
                     return `
           <div class="base-card">
             <div class="img-wrap">
-              <img src="${escapeAttr(thImg)}" alt="${escapeAttr(b.type)}" loading="lazy">
+              <img src="${escapeAttr(imgSrc)}" alt="${escapeAttr(b.type || '')}" loading="lazy" onerror="this.src='${escapeAttr(thImg)}'">
             </div>
             <div class="body">
-              <div class="title">${escapeHtml(b.type)} — база ${i + 1}</div>
-              <div class="desc">${escapeHtml(b.description)}</div>
-              <div class="rating">★ ${b.rating}/10</div>
+              <div class="title">${escapeHtml(b.type || 'База')} — база ${i + 1}</div>
+              <div class="desc">${escapeHtml(b.description || '')}</div>
+              <div class="rating">★ ${escapeHtml(String(ratingText))}</div>
               <button type="button" class="link-btn" data-link="${escapeAttr(actionUrl)}">📱 Открыть в игре</button>
-              <a href="${escapeAttr(b.link)}" target="_blank" rel="noopener" class="link-open">Открыть страницу базы</a>
+              <a href="${escapeAttr(b.link || '#')}" target="_blank" rel="noopener" class="link-open">Открыть страницу базы</a>
             </div>
           </div>
         `;
