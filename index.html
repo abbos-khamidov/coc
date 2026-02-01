@@ -237,6 +237,8 @@
       box-shadow: 0 12px 28px rgba(0,0,0,0.35);
     }
     .th-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .th-card.selected .th-label-desc { color: var(--accent); }
+    .th-card.selected .th-label-desc::after { content: ' ✓'; font-weight: 700; }
     .th-card .th-img {
       width: 100%;
       flex: 1;
@@ -245,19 +247,28 @@
       padding: clamp(16px, 3vw, 24px);
       display: block;
     }
+    .th-card .th-label-wrap {
+      width: 100%;
+      background: var(--surface);
+      padding: 14px 12px;
+      flex-shrink: 0;
+      text-align: center;
+    }
     .th-card .th-label {
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-weight: 700;
       font-size: 1.2rem;
       font-variant-numeric: tabular-nums;
       letter-spacing: 0.08em;
-      padding: 16px 12px;
-      margin: 0;
-      background: var(--surface);
-      width: 100%;
-      text-align: center;
-      flex-shrink: 0;
+      display: block;
       line-height: 1.2;
+    }
+    .th-card .th-label-desc {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
     }
     .th-card .th-label-fallback { font-size: 1.6rem; padding: 28px; }
 
@@ -530,8 +541,11 @@
         card.className = 'th-card';
         card.setAttribute('data-th', th);
         card.innerHTML = `
-          <img class="th-img" src="${getThImageUrl(th)}" alt="TH${th}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling?.classList.add('th-label-fallback')">
-          <span class="th-label">TH${th}</span>
+          <img class="th-img" src="${getThImageUrl(th)}" alt="Расстановка TH${th}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling?.querySelector('.th-label')?.classList.add('th-label-fallback')">
+          <div class="th-label-wrap">
+            <span class="th-label">TH${th}</span>
+            <span class="th-label-desc">Расстановка базы</span>
+          </div>
         `;
         card.addEventListener('click', function(e) {
           e.preventDefault();
@@ -592,14 +606,26 @@
               btn.textContent = '✓ Скопировано! Открой CoC и вставь в настройках';
               btn.classList.add('copied');
               if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.showPopup({ title: 'Готово', message: 'Ссылка скопирована. Открой Clash of Clans → Настройки → Вставить ссылку базы.' });
+                window.Telegram.WebApp.showPopup({ title: 'Готово', message: 'Ссылка скопирована. Если игра открылась — вставь ссылку в Настройках → Вставить ссылку базы.' });
               }
+              tryOpenGame();
+            }
+            function tryOpenGame() {
+              var schemes = ['clashofclans://', 'supercell-clashofclans://'];
+              var a = document.createElement('a');
+              a.href = schemes[0];
+              a.style.display = 'none';
+              document.body.appendChild(a);
+              setTimeout(function() {
+                try { a.click(); } catch (e) {}
+                document.body.removeChild(a);
+              }, 100);
             }
             if (navigator.clipboard && navigator.clipboard.writeText) {
               navigator.clipboard.writeText(link).then(doCopy).catch(fallbackCopy);
             } else { fallbackCopy(); }
             function fallbackCopy() {
-              const ta = document.createElement('textarea');
+              var ta = document.createElement('textarea');
               ta.value = link; ta.style.position = 'fixed'; ta.style.opacity = '0';
               document.body.appendChild(ta); ta.select();
               try { document.execCommand('copy'); } catch (e) {}
